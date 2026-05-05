@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Tamanho de Lote | Trade ao Vivo</title>
+  <meta name="description" content="Calculadora gratuita de tamanho de lote para day traders. Calcule ações, WIN, WDO e BIT com gestão de risco precisa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google AdSense — substitua ca-pub-XXXXXXXXXXXXXXXX pelo seu ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📊</span>
+        <span class="logo-text">Trade ao Vivo</span>
+      </div>
+      <div class="header-actions">
+        <span class="free-badge" id="user-badge">Versão Gratuita</span>
+        <button class="btn-subscribe" id="btn-subscribe" onclick="openSubscribeModal()">
+          ⚡ Assinar — R$ 9,90/mês
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- AD BANNER TOP (visível apenas para não-assinantes) -->
+  <div class="ad-banner ad-top" id="ad-top">
+    <div class="ad-label">Publicidade · <a href="#" onclick="openSubscribeModal(); return false;">Remover anúncios</a></div>
+    <div class="ad-product-carousel" id="carousel-top"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Calculadora de Tamanho de Lote</h1>
+    <p>Gestão de risco precisa para Ações, WIN, WDO e BIT. Gratuita e sem cadastro.</p>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('acoes', this)">📈 Ações</button>
+      <button class="tab" onclick="switchTab('win', this)">🏆 WIN</button>
+      <button class="tab" onclick="switchTab('wdo', this)">💵 WDO</button>
+      <button class="tab" onclick="switchTab('bit', this)">₿ BIT</button>
+    </div>
+
+    <!-- ===== AÇÕES ===== -->
+    <div class="calc-panel active" id="panel-acoes">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📈</div>
+          <div>
+            <div class="card-title">Ações</div>
+            <div class="card-subtitle">Calcule a quantidade ideal de ações pelo seu risco</div>
+          </div>
+        </div>
+        <div class="inputs-grid">
+          <div class="input-group">
+            <label>Risco por ação (centavos)</label>
+            <div class="input-wrap">
+              <input type="number" id="acoes-risco" placeholder="0.20" step="0.01" min="0" oninput="calcAcoes()" />
+            </div>
+            <span class="input-hint">Ex: 0,20 = 20 centavos de stop por ação</span>
+          </div>
+          <div class="input-group">
+            <label>Valor máximo de loss (R$)</label>
+            <div class="input-wrap prefix">
+              <span class="prefix-label">R$</span>
+              <input type="number" id="acoes-loss" placeholder="100" step="1" min="0" oninput="calcAcoes()" />
+            </div>
+            <span class="input-hint">Quanto você aceita perder nessa operação</span>
+          </div>
+        </div>
+        <div class="result-box" id="acoes-result">
+          <div class="result-label">Quantidade de Ações</div>
+          <div class="result-value" id="acoes-qty">—</div>
+          <div class="result-unit">AÇÕES</div>
+          <div class="result-formula">Qtd = Loss ÷ Risco por ação</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== WIN ===== -->
+    <div class="calc-panel" id="panel-win">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🏆</div>
+          <div>
+            <div class="card-title">WINFUT — Mini Índice</div>
+            <div class="card-subtitle">1 ponto = R$ 0,20 por contrato</div>
+          </div>
+        </div>
+        <div class="inputs-grid">
+          <div class="input-group">
+            <label>Risco (pontos)</label>
+            <div class="input-wrap">
+              <input type="number" id="win-risco" placeholder="200" step="1" min="0" oninput="calcWin()" />
+            </div>
+            <span class="input-hint">Distância do stop em pontos</span>
+          </div>
+          <div class="input-group">
+            <label>Valor máximo de loss (R$)</label>
+            <div class="input-wrap prefix">
+              <span class="prefix-label">R$</span>
+              <input type="number" id="win-loss" placeholder="100" step="1" min="0" oninput="calcWin()" />
+            </div>
+            <span class="input-hint">Quanto você aceita perder</span>
+          </div>
+          <div class="input-group readonly">
+            <label>Loss com 1 contrato (R$) ↓ AUTO</label>
+            <div class="input-wrap">
+              <input type="text" id="win-loss1" readonly placeholder="—" />
+            </div>
+            <span class="input-hint">1 ponto = R$ 0,20 · Calculado automaticamente</span>
+          </div>
+        </div>
+        <div class="result-box" id="win-result">
+          <div class="result-label">Contratos</div>
+          <div class="result-value" id="win-qty">—</div>
+          <div class="result-unit">MINI CONTRATOS</div>
+          <div class="result-formula">1 ponto WINFUT = R$ 0,20 · Qtd = Loss ÷ (Risco × 0,20)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== WDO ===== -->
+    <div class="calc-panel" id="panel-wdo">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💵</div>
+          <div>
+            <div class="card-title">WDOFUT — Mini Dólar</div>
+            <div class="card-subtitle">1 ponto = R$ 10,00 por contrato</div>
+          </div>
+        </div>
+        <div class="inputs-grid">
+          <div class="input-group">
+            <label>Risco (pontos)</label>
+            <div class="input-wrap">
+              <input type="number" id="wdo-risco" placeholder="5" step="0.5" min="0" oninput="calcWdo()" />
+            </div>
+            <span class="input-hint">Distância do stop em pontos</span>
+          </div>
+          <div class="input-group">
+            <label>Valor máximo de loss (R$)</label>
+            <div class="input-wrap prefix">
+              <span class="prefix-label">R$</span>
+              <input type="number" id="wdo-loss" placeholder="100" step="1" min="0" oninput="calcWdo()" />
+            </div>
+            <span class="input-hint">Quanto você aceita perder</span>
+          </div>
+          <div class="input-group readonly">
+            <label>Loss com 1 contrato (R$) ↓ AUTO</label>
+            <div class="input-wrap">
+              <input type="text" id="wdo-loss1" readonly placeholder="—" />
+            </div>
+            <span class="input-hint">1 ponto = R$ 10,00 · Calculado automaticamente</span>
+          </div>
+        </div>
+        <div class="result-box" id="wdo-result">
+          <div class="result-label">Contratos</div>
+          <div class="result-value" id="wdo-qty">—</div>
+          <div class="result-unit">MINI CONTRATOS</div>
+          <div class="result-formula">1 ponto WDOFUT = R$ 10,00 · Qtd = Loss ÷ (Risco × 10)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BIT ===== -->
+    <div class="calc-panel" id="panel-bit">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">₿</div>
+          <div>
+            <div class="card-title">BITFUT — Mini Bitcoin</div>
+            <div class="card-subtitle">1 ponto = R$ 0,01 por contrato</div>
+          </div>
+        </div>
+        <div class="inputs-grid">
+          <div class="input-group">
+            <label>Risco (pontos)</label>
+            <div class="input-wrap">
+              <input type="number" id="bit-risco" placeholder="500" step="1" min="0" oninput="calcBit()" />
+            </div>
+            <span class="input-hint">Distância do stop em pontos</span>
+          </div>
+          <div class="input-group">
+            <label>Valor máximo de loss (R$)</label>
+            <div class="input-wrap prefix">
+              <span class="prefix-label">R$</span>
+              <input type="number" id="bit-loss" placeholder="100" step="1" min="0" oninput="calcBit()" />
+            </div>
+            <span class="input-hint">Quanto você aceita perder</span>
+          </div>
+          <div class="input-group readonly">
+            <label>Loss com 1 contrato (R$) ↓ AUTO</label>
+            <div class="input-wrap">
+              <input type="text" id="bit-loss1" readonly placeholder="—" />
+            </div>
+            <span class="input-hint">1 ponto = R$ 0,01 · Calculado automaticamente</span>
+          </div>
+        </div>
+        <div class="result-box" id="bit-result">
+          <div class="result-label">Contratos</div>
+          <div class="result-value" id="bit-qty">—</div>
+          <div class="result-unit">MINI CONTRATOS</div>
+          <div class="result-formula">1 ponto BITFUT = R$ 0,01 · Qtd = Loss ÷ (Risco × 0,01)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AD MIDDLE (visível apenas para não-assinantes) -->
+    <div class="ad-banner ad-middle" id="ad-middle">
+      <div class="ad-label">Publicidade · <a href="#" onclick="openSubscribeModal(); return false;">Remover anúncios</a></div>
+      <div class="ad-product-carousel" id="carousel-middle"></div>
+    </div>
+
+  </main>
+
+  <!-- AD BANNER BOTTOM (visível apenas para não-assinantes) -->
+  <div class="ad-banner ad-bottom" id="ad-bottom">
+    <div class="ad-label">Publicidade · <a href="#" onclick="openSubscribeModal(); return false;">Remover anúncios</a></div>
+    <div class="ad-product-carousel" id="carousel-bottom"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Trade ao Vivo · Flávio Pascoal · <a href="#" onclick="openSubscribeModal(); return false;">Remover anúncios</a></p>
+  </footer>
+
+  <!-- MODAL ASSINATURA -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeSubscribeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeSubscribeModal()">✕</button>
+      <div class="modal-icon">⚡</div>
+      <h2>Use sem anúncios</h2>
+      <p>Acesso limpo, sem distrações. Ideal pra quem opera todo dia.</p>
+      <ul class="modal-benefits">
+        <li>✅ Zero anúncios</li>
+        <li>✅ Todas as calculadoras</li>
+        <li>✅ Acesso imediato</li>
+        <li>✅ Cancele quando quiser</li>
+      </ul>
+
+      <div class="plans">
+        <!-- PLANO MENSAL -->
+        <div class="plan" id="plan-mensal" onclick="selectPlan('mensal')">
+          <div class="plan-name">Mensal</div>
+          <div class="plan-price">R$ 9,90<span>/mês</span></div>
+          <div class="plan-detail">Cobrado mensalmente</div>
+        </div>
+        <!-- PLANO ANUAL -->
+        <div class="plan plan-highlight" id="plan-anual" onclick="selectPlan('anual')">
+          <div class="plan-badge">2 meses grátis</div>
+          <div class="plan-name">Anual</div>
+          <div class="plan-price">R$ 79,00<span>/ano</span></div>
+          <div class="plan-detail">R$ 6,58/mês · Melhor valor</div>
+        </div>
+      </div>
+
+      <button class="btn-checkout" id="btn-checkout-final" onclick="confirmCheckout()">
+        Assinar agora →
+      </button>
+      <p class="modal-fine">Pagamento seguro via Hotmart · PIX, cartão e boleto</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
